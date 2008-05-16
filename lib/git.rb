@@ -1,5 +1,6 @@
 require 'rubygems'
-require 'grit'
+require 'mojombo-grit'
+require 'builder_error' #FAILED: uninitialized constant Git::BuilderError without this
 
 class GitRevision < Revision
   attr_accessor :commit
@@ -43,7 +44,7 @@ class Git
   end
   
   def latest_revision
-    GitRevision.new(repo.commits.first)
+    GitRevision.new(repo.commits(@branch).first)
   end
 
   def update_origin
@@ -76,6 +77,8 @@ class Git
   def clone(stdout = $stdout)
     FileUtils.rm_rf(path) if File.exists?(@path)
     git("clone", [@url, @path], :execute_locally => false)
+    # Need the -q switch due to bug in git-checkout which outputs 'Switched to a new branch <branch>' to stderr
+    git("checkout", ["--track", "-b", @branch, "origin/#{@branch}", "-q"]) unless @branch == 'master'
   end
   
   def git(operation, arguments, options = {}, &block)

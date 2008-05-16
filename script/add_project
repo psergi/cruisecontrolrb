@@ -29,7 +29,7 @@ ARGV.options do |opts|
   
   opts.on("--username username", String, "Specify a username for source control") { |v| scm_options[:username] = v }
   opts.on("--password password", String, "Specify a password for source control") { |v| scm_options[:password] = v }
-  opts.on("-b", "--branch", String, "Specify a branch to track(git only)") { |v| scm_options[:branch] = v}
+  opts.on("-b", "--branch branch", String, "Specify a branch to track(git only)") { |v| scm_options[:branch] = v}
   opts.on('-t', '--trace', 'Print out exception stack traces') { trace = true }
 
   opts.separator ""
